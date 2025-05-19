@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #0e0d0d;
+      color: #fcf8f8;
+      font-style: oblique;
+    }
+
+    .task {
+      background-color: #7a7c04;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(146, 175, 92, 0.425);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .task:hover {
+      transform: translateY(-5px);
+      background-color: #d8f006;
+    }
+
+    .task.completed {
+      text-decoration: line-through;
+      color: #bbb;
+    }
+
+    .task-button {
+      background-color: #ff6600;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .task-button:hover {
+      background-color: #e65c00;
+    }
+
+    .task-edit {
+      background-color: #022503;
+    }
+
+    .task-delete {
+      background-color: #2e0602;
+    }
+
+    .task-button:focus {
+      outline: none;
+    }
+
+    .task-text {
+      flex-grow: 1;
+      cursor: pointer;
+    }
+
+    /* Input Animation for Editing */
+    .task-editing {
+      border: 2px solid #27b83f;
+      padding: 10px;
+      width: 80%;
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+
+    /* Task input in focus */
+    .task-editing:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(72, 227, 72, 0.8);
+    }
+
+    /* Container for task list */
+    .task-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    /* Form Styling */
+    .task-form {
+      margin-bottom: 20px;
+    }
+
+    .task-form input {
+      padding: 12px;
+      border-radius: 5px;
+      width: 80%;
+      border: 2px solid #ccc;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .task-form button {
+      padding: 12px;
+      background-color: #49120a;
+      color: rgb(247, 244, 244);
+      border-radius: 5px;
+      width: 18%;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .task-form button:hover {
+      background-color: #1bc40c;
+    }
+  </style>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-500 to-blue-600">
+
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+    <h2 class="text-3xl font-semibold text-center mb-6 text-teal-600">Interactive Task Tracker</h2>
+
+    <!-- Form for adding tasks -->
+    <form id="task-form" class="task-form">
+      <input type="text" id="task-input" class="text-gray-800 p-3 rounded-md w-full mb-4" placeholder="Enter a new task" required />
+      <button type="submit">Add Task</button>
+    </form>
+
+    <!-- Task List -->
+    <ul id="task-list" class="task-list">
+      <!-- Tasks will be dynamically added here -->
+    </ul>
+  </div>
+
+  <script>
+    // Get DOM elements
+    const taskInput = document.getElementById("task-input");
+    const taskForm = document.getElementById("task-form");
+    const taskList = document.getElementById("task-list");
+
+    // Load tasks from localStorage
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    // Render tasks to the screen
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const taskItem = document.createElement("li");
+        taskItem.classList.add("task");
+        taskItem.classList.toggle("completed", task.completed);
+
+        // Set task content
+        taskItem.innerHTML = `
+          <input type="checkbox" ${task.completed ? "checked" : ""} class="task-checkbox" data-index="${index}" />
+          <span class="task-text" onclick="editTask(${index})">${task.text}</span>
+          <button class="task-button task-edit" onclick="editTask(${index})">Edit</button>
+          <button class="task-button task-delete" onclick="deleteTask(${index})">Delete</button>
+        `;
+        
+        taskList.appendChild(taskItem);
+      });
+    }
+
+    // Add task
+    taskForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        tasks.push({ text: taskText, completed: false });
+        taskInput.value = "";
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        renderTasks();
+      }
+    });
+
+    // Mark task as completed
+    taskList.addEventListener("click", (e) => {
+      if (e.target.classList.contains("task-checkbox")) {
+        const index = e.target.dataset.index;
+        tasks[index].completed = e.target.checked;
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        renderTasks();
+      }
+    });
+
+    // Edit task
+    function editTask(index) {
+      const taskItem = taskList.children[index];
+      const taskText = taskItem.querySelector(".task-text");
+
+      // Create an input field to edit the task
+      const inputField = document.createElement("input");
+      inputField.type = "text";
+      inputField.value = tasks[index].text;
+      inputField.classList.add("task-editing");
+      inputField.addEventListener("blur", () => saveEditedTask(index, inputField.value));
+
+      // Replace task text with the input field
+      taskItem.replaceChild(inputField, taskText);
+      inputField.focus();
+    }
+
+    // Save edited task
+    function saveEditedTask(index, newText) {
+      tasks[index].text = newText;
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    // Delete task
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    // Initial render
+    renderTasks();
+  </script>
+
+</body>
+</html>
+
