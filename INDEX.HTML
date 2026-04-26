@@ -1,226 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Tracker</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #0e0d0d;
-      color: #fcf8f8;
-      font-style: oblique;
-    }
-
-    .task {
-      background-color: #7a7c04;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 5px 15px rgba(146, 175, 92, 0.425);
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-
-    .task:hover {
-      transform: translateY(-5px);
-      background-color: #d8f006;
-    }
-
-    .task.completed {
-      text-decoration: line-through;
-      color: #bbb;
-    }
-
-    .task-button {
-      background-color: #ff6600;
-      color: white;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .task-button:hover {
-      background-color: #e65c00;
-    }
-
-    .task-edit {
-      background-color: #022503;
-    }
-
-    .task-delete {
-      background-color: #2e0602;
-    }
-
-    .task-button:focus {
-      outline: none;
-    }
-
-    .task-text {
-      flex-grow: 1;
-      cursor: pointer;
-    }
-
-    /* Input Animation for Editing */
-    .task-editing {
-      border: 2px solid #27b83f;
-      padding: 10px;
-      width: 80%;
-      margin: 0;
-      transition: all 0.3s ease;
-    }
-
-    /* Task input in focus */
-    .task-editing:focus {
-      outline: none;
-      box-shadow: 0 0 10px rgba(72, 227, 72, 0.8);
-    }
-
-    /* Container for task list */
-    .task-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    /* Form Styling */
-    .task-form {
-      margin-bottom: 20px;
-    }
-
-    .task-form input {
-      padding: 12px;
-      border-radius: 5px;
-      width: 80%;
-      border: 2px solid #ccc;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    .task-form button {
-      padding: 12px;
-      background-color: #49120a;
-      color: rgb(247, 244, 244);
-      border-radius: 5px;
-      width: 18%;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .task-form button:hover {
-      background-color: #1bc40c;
-    }
-  </style>
+  <meta name="description" content="TaskMaster Pro - A high-performance, animated task management application" />
+  <title>TaskMaster Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-500 to-blue-600">
+<body>
+  <div class="bg-animation">
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+</div> <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>TaskMaster</h1>
+          <span>Pro</span>
+        </div>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
 
-  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
-    <h2 class="text-3xl font-semibold text-center mb-6 text-teal-600">Interactive Task Tracker</h2>
+    <section class="dashboard" id="dashboard">
+  <div class="dashboard-content">
+    <div class="progress-ring-container">
+      <svg class="progress-ring" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6366f1"/>
+            <stop offset="100%" stop-color="#8b5cf6"/>
+          </linearGradient>
+        </defs>
+        <circle class="progress-ring-bg" cx="60" cy="60" r="52"/>
+        <circle class="progress-ring-fill" cx="60" cy="60" r="52" id="progress-circle"/>
+      </svg>
+      <div class="progress-text">
+        <span id="progress-percent">0%</span>
+        <small>Done</small>
+      </div>
+    </div>
 
-    <!-- Form for adding tasks -->
-    <form id="task-form" class="task-form">
-      <input type="text" id="task-input" class="text-gray-800 p-3 rounded-md w-full mb-4" placeholder="Enter a new task" required />
-      <button type="submit">Add Task</button>
-    </form>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="total-tasks">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="active-tasks">0</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="completed-tasks">0</div>
+        <div class="stat-label">Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="overdue-tasks">0</div>
+        <div class="stat-label">Overdue</div>
+      </div>
+    </div>
+  </div>
+</section>
+    
+    <section class="task-input-section">
+      <form id="task-form" class="task-form" autocomplete="off">
+        <div class="input-group">
+          <input type="text" id="task-input" placeholder="What needs to be done?" required maxlength="200" aria-label="New task description" />
+          <button type="submit" class="btn-add" id="btn-add" aria-label="Add task">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="form-options">
+          <div class="option-group">
+            <label for="task-priority">Priority</label>
+            <select id="task-priority" aria-label="Task priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="task-category">Category</label>
+            <select id="task-category" aria-label="Task category">
+              <option value="personal">Personal</option>
+              <option value="work">Work</option>
+              <option value="urgent">Urgent</option>
+              <option value="health">Health</option>
+              <option value="learning">Learning</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="task-due">Due Date</label>
+            <input type="date" id="task-due" aria-label="Due date" />
+          </div>
+      </form>
+    </section>
 
-    <!-- Task List -->
-    <ul id="task-list" class="task-list">
-      <!-- Tasks will be dynamically added here -->
-    </ul>
+    <section class="filters-section">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search tasks..." aria-label="Search tasks" />
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="active">Active</button>
+        <button class="filter-tab" data-filter="completed">Completed</button>
+      </div>
+      <div class="sort-dropdown">
+        <select id="sort-select" aria-label="Sort tasks">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="priority">Priority</option>
+          <option value="due-date">Due Date</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="task-list-section">
+      <ul id="task-list" class="task-list" role="list" aria-label="Tasks">
+      </ul>
+      <div id="empty-state" class="empty-state">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+            <path d="M70 100l20 20 40-40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+            <rect x="60" y="60" width="80" height="80" rx="10" stroke="currentColor" stroke-width="2" opacity="0.15"/>
+          </svg>
+        </div>
+        <h3>All caught up!</h3>
+        <p>Add a new task to get started</p>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>TaskMaster Pro v2.0</p>
+    </footer>
   </div>
 
-  <script>
-    // Get DOM elements
-    const taskInput = document.getElementById("task-input");
-    const taskForm = document.getElementById("task-form");
-    const taskList = document.getElementById("task-list");
+  <div id="edit-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title" hidden>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="edit-modal-title">Edit Task</h3>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id" />
+        <div class="form-field">
+          <label for="edit-text">Task</label>
+          <input type="text" id="edit-text" required maxlength="200" />
+        </div>
+        <div class="form-field">
+          <label for="edit-priority">Priority</label>
+          <select id="edit-priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="edit-category">Category</label>
+          <select id="edit-category">
+            <option value="personal">Personal</option>
+            <option value="work">Work</option>
+            <option value="urgent">Urgent</option>
+            <option value="health">Health</option>
+            <option value="learning">Learning</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="edit-due">Due Date</label>
+          <input type="date" id="edit-due" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel">Cancel</button>
+          <button type="submit" class="btn-save">Save Changes</button>
+        </div>
+      </form>
+    </div>
 
-    // Load tasks from localStorage
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-    // Render tasks to the screen
-    function renderTasks() {
-      taskList.innerHTML = "";
-      tasks.forEach((task, index) => {
-        const taskItem = document.createElement("li");
-        taskItem.classList.add("task");
-        taskItem.classList.toggle("completed", task.completed);
-
-        // Set task content
-        taskItem.innerHTML = `
-          <input type="checkbox" ${task.completed ? "checked" : ""} class="task-checkbox" data-index="${index}" />
-          <span class="task-text" onclick="editTask(${index})">${task.text}</span>
-          <button class="task-button task-edit" onclick="editTask(${index})">Edit</button>
-          <button class="task-button task-delete" onclick="deleteTask(${index})">Delete</button>
-        `;
-        
-        taskList.appendChild(taskItem);
-      });
-    }
-
-    // Add task
-    taskForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const taskText = taskInput.value.trim();
-      if (taskText) {
-        tasks.push({ text: taskText, completed: false });
-        taskInput.value = "";
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        renderTasks();
-      }
-    });
-
-    // Mark task as completed
-    taskList.addEventListener("click", (e) => {
-      if (e.target.classList.contains("task-checkbox")) {
-        const index = e.target.dataset.index;
-        tasks[index].completed = e.target.checked;
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        renderTasks();
-      }
-    });
-
-    // Edit task
-    function editTask(index) {
-      const taskItem = taskList.children[index];
-      const taskText = taskItem.querySelector(".task-text");
-
-      // Create an input field to edit the task
-      const inputField = document.createElement("input");
-      inputField.type = "text";
-      inputField.value = tasks[index].text;
-      inputField.classList.add("task-editing");
-      inputField.addEventListener("blur", () => saveEditedTask(index, inputField.value));
-
-      // Replace task text with the input field
-      taskItem.replaceChild(inputField, taskText);
-      inputField.focus();
-    }
-
-    // Save edited task
-    function saveEditedTask(index, newText) {
-      tasks[index].text = newText;
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      renderTasks();
-    }
-
-    // Delete task
-    function deleteTask(index) {
-      tasks.splice(index, 1);
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      renderTasks();
-    }
-
-    // Initial render
-    renderTasks();
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
-
